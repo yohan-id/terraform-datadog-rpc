@@ -1,8 +1,11 @@
-module "beical_app_monitor_rpc" {
+module "rpc" {
   source         = "../../"
   product_domain = "BEI"
   service        = "beical"
   cluster        = "beical-app"
+  environment    = "production"
+
+  recipients = ["slack-bei", "pagerduty-bei", "bei@traveloka.com"]
 
   server_latency_p95_thresholds = {
     critical = 1000
@@ -24,5 +27,7 @@ module "beical_app_monitor_rpc" {
     warning  = 40
   }
 
-  recipients = ["slack-bei", "pagerduty-bei", "bei@traveloka.com"]
+  circuit_breaker_status_thresholds = {
+    critical = "2"
+  }
 }
