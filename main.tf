@@ -106,7 +106,7 @@ resource "datadog_timeboard" "rpc" {
 
 module "monitor_server_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${var.enabled}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -126,7 +126,7 @@ module "monitor_server_latency_p95" {
 
 module "monitor_server_exception" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${var.enabled}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -146,7 +146,7 @@ module "monitor_server_exception" {
 
 module "monitor_client_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${var.enabled}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -166,7 +166,7 @@ module "monitor_client_latency_p95" {
 
 module "monitor_client_exception" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${var.enabled}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -186,7 +186,7 @@ module "monitor_client_exception" {
 
 module "monitor_circuit_breaker_status" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${var.enabled}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
