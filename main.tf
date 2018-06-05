@@ -111,6 +111,8 @@ module "monitor_server_latency_p95" {
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
   environment    = "${var.environment}"
+  tags           = "${var.tags}"
+  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"
   query              = "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_latency_p95_thresholds["critical"]}"
@@ -118,7 +120,9 @@ module "monitor_server_latency_p95" {
   message            = "${var.server_latency_p95_message}"
   escalation_message = "${var.server_latency_p95_escalation_message}"
 
-  recipients = "${var.recipients}"
+  recipients         = "${var.recipients}"
+  alert_recipients   = "${var.alert_recipients}"
+  warning_recipients = "${var.warning_recipients}"
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
@@ -131,6 +135,8 @@ module "monitor_server_exception" {
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
   environment    = "${var.environment}"
+  tags           = "${var.tags}"
+  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Exception is High on Class: {{ classname }} Method: {{ methodname }}"
   query              = "avg(last_1m):avg:rpc.server.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_exception_thresholds["critical"]}"
@@ -138,7 +144,9 @@ module "monitor_server_exception" {
   message            = "${var.server_exception_message}"
   escalation_message = "${var.server_exception_escalation_message}"
 
-  recipients = "${var.recipients}"
+  recipients         = "${var.recipients}"
+  alert_recipients   = "${var.alert_recipients}"
+  warning_recipients = "${var.warning_recipients}"
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
@@ -151,6 +159,8 @@ module "monitor_client_latency_p95" {
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
   environment    = "${var.environment}"
+  tags           = "${var.tags}"
+  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Class: {{ classname }} Method: {{ methodname }} Destination: {{ destnodeid }}"
   query              = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname,destnodeid} >= ${var.client_latency_p95_thresholds["critical"]}"
@@ -158,7 +168,9 @@ module "monitor_client_latency_p95" {
   message            = "${var.client_latency_p95_message}"
   escalation_message = "${var.client_latency_p95_escalation_message}"
 
-  recipients = "${var.recipients}"
+  recipients         = "${var.recipients}"
+  alert_recipients   = "${var.alert_recipients}"
+  warning_recipients = "${var.warning_recipients}"
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
@@ -171,6 +183,8 @@ module "monitor_client_exception" {
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
   environment    = "${var.environment}"
+  tags           = "${var.tags}"
+  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Class: {{ classname }} Method: {{ methodname }} Destination: {{ destnodeid }}"
   query              = "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname,destnodeid} >= ${var.client_exception_thresholds["critical"]}"
@@ -178,7 +192,9 @@ module "monitor_client_exception" {
   message            = "${var.client_exception_message}"
   escalation_message = "${var.client_exception_escalation_message}"
 
-  recipients = "${var.recipients}"
+  recipients         = "${var.recipients}"
+  alert_recipients   = "${var.alert_recipients}"
+  warning_recipients = "${var.warning_recipients}"
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
@@ -191,6 +207,8 @@ module "monitor_circuit_breaker_status" {
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
   environment    = "${var.environment}"
+  tags           = "${var.tags}"
+  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"
   query              = "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.circuit_breaker_status_thresholds["critical"]}"
@@ -198,7 +216,9 @@ module "monitor_circuit_breaker_status" {
   message            = "${var.circuit_breaker_status_message}"
   escalation_message = "${var.circuit_breaker_status_escalation_message}"
 
-  recipients = "${var.recipients}"
+  recipients         = "${var.recipients}"
+  alert_recipients   = "${var.alert_recipients}"
+  warning_recipients = "${var.warning_recipients}"
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
