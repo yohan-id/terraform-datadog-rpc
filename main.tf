@@ -102,6 +102,44 @@ resource "datadog_timeboard" "rpc" {
       type = "line"
     }
   }
+  
+  graph {
+    title     = "Circuit Breaker State"
+    viz       = "timeseries"
+    autoscale = true
+
+    request {
+      q    = "sum:CircuitBreaker.status.lastNumber{$cluster, $environment} by {host,name,classname,methodname}"
+      type = "line"
+    }
+
+    marker {
+      type  = "ok bold"
+      value = "y = 1" 
+      label = "CLOSE"
+    }
+    marker {
+      type  = "error bold"
+      value = "y = 2" 
+      label = "OPEN"
+    }
+    marker {
+      type  = "warning bold"
+      value = "y = 3" 
+      label = "HALF OPEN"
+    }
+  }
+
+  graph {
+    title     = "Circuit Breaker Failure"
+    viz       = "timeseries"
+    autoscale = true
+
+    request {
+      q    = "sum:CircuitBreaker.failure.value{$cluster, $environment} by {host,name,classname,methodname}"
+      type = "line"
+    }
+  }
 }
 
 module "monitor_server_latency_p95" {
