@@ -200,8 +200,8 @@ module "monitor_client_latency_p95" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Class: {{ classname }} Method: {{ methodname }} Destination: {{ destnodeid }}"
-  query              = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname,destnodeid} >= ${var.client_latency_p95_thresholds["critical"]}"
+  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
+  query              = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,methodname,destnodeid} >= ${var.client_latency_p95_thresholds["critical"]}"
   thresholds         = "${var.client_latency_p95_thresholds}"
   message            = "${var.client_latency_p95_message}"
   escalation_message = "${var.client_latency_p95_escalation_message}"
@@ -224,8 +224,8 @@ module "monitor_client_exception" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Class: {{ classname }} Method: {{ methodname }} Destination: {{ destnodeid }}"
-  query              = "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname,destnodeid} >= ${var.client_exception_thresholds["critical"]}"
+  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
+  query              = "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,methodname,destnodeid} >= ${var.client_exception_thresholds["critical"]}"
   thresholds         = "${var.client_exception_thresholds}"
   message            = "${var.client_exception_message}"
   escalation_message = "${var.client_exception_escalation_message}"
