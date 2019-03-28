@@ -33,17 +33,13 @@ resource "datadog_timeboard" "rpc" {
   }
 
   graph {
-    title     = "RPC Client Count"
+    title     = "RPC Client Count (Rollup: Sum)"
     viz       = "timeseries"
     autoscale = true
 
     request {
-      q    = "sum:rpc.client..count{$cluster, $environment} by {host,name,destnodeid}"
-      type = "line"
-    }
+      q    = "sum:rpc.client.count{$cluster, $environment} by {host,name,destnodeid}.rollup(sum)"
 
-    request {
-      q    = "sum:rpc.client.count{$cluster, $environment} by {host,name,destnodeid}"
       type = "line"
     }
   }
@@ -60,23 +56,23 @@ resource "datadog_timeboard" "rpc" {
   }
 
   graph {
-    title     = "RPC Client Exception Count"
+    title     = "RPC Client Exception Count (Rollup: Sum)"
     viz       = "timeseries"
     autoscale = true
 
     request {
-      q    = "sum:rpc.client.exc.count{$cluster, $environment} by {host,name,destnodeid}"
+      q    = "sum:rpc.client.exc.count{$cluster, $environment} by {host,name,destnodeid}.rollup(sum)"
       type = "line"
     }
   }
 
   graph {
-    title     = "RPC Server Count"
+    title     = "RPC Server Count (Rollup: Sum)"
     viz       = "timeseries"
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.count{$cluster, $environment,$classname,$methodname} by {host,name,classname,methodname}"
+      q    = "sum:rpc.server.count{$cluster, $environment,$classname,$methodname} by {host,name,classname,methodname}.rollup(sum)"
       type = "line"
     }
   }
@@ -93,12 +89,12 @@ resource "datadog_timeboard" "rpc" {
   }
 
   graph {
-    title     = "RPC Server Exception Count"
+    title     = "RPC Server Exception Count (Rollup: Sum)"
     viz       = "timeseries"
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname} by {host,name,classname,methodname}"
+      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname} by {host,name,classname,methodname}.rollup(sum)"
       type = "line"
     }
   }
