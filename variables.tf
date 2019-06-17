@@ -170,28 +170,3 @@ variable "circuit_breaker_status_escalation_message" {
   default     = ""
   description = "The escalation message when RPC Circuit Breaker Status monitor isn't resolved for given time"
 }
-
-variable "server_method_names" {
-  type        = "list"
-  default     = []
-  description = "multi monitoring for server method names"
-}
-
-variable "server_thresholds" {
-  type        = "list"
-  default     = []
-  description = "multi thresholds for multi server monitoring"
-}
-
-variable "client_method_names" {
-  type        = "list"
-  default     = []
-  description = "multi monitoring for client method names"
-}
-
-variable "client_thresholds" {
-  type        = "list"
-  default     = []
-  description = "multi thresholds for multi client monitoring"
-}
-

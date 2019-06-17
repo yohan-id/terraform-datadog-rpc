@@ -1,7 +1,5 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
-  multi_server_enabled = "${length(var.server_method_names) > 0 && length(var.server_thresholds) > 0 ? 1 : 0}"
-  multi_client_enabled = "${length(var.client_method_names) > 0 && length(var.client_thresholds) > 0 ? 1 : 0}"
 }
 
 resource "datadog_timeboard" "rpc" {
@@ -142,7 +140,7 @@ resource "datadog_timeboard" "rpc" {
 
 module "monitor_server_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${local.monitor_enabled && length(var.server_method_names) < 1}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -162,32 +160,6 @@ module "monitor_server_latency_p95" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
-}
-
-module "monitor_server_latency_p95_multi" {
-  source  = "github.com/traveloka/terraform-datadog-monitor"
-  count   = "${length(var.server_method_names)}"
-  enabled = "${local.multi_server_enabled}"
-
-  product_domain = "${var.product_domain}"
-  service        = "${var.service}"
-  environment    = "${var.environment}"
-  tags           = "${var.tags}"
-  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
-
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: ${var.server_method_names[count.index]}"
-  query              = "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}, methodname:${var.server_method_names[count.index]}} by {host,classname} >= ${var.server_thresholds[count.index]["critical"]}"
-  thresholds         = "${var.server_thresholds[count.index]}"
-  message            = "${var.server_latency_p95_message}"
-  escalation_message = "${var.server_latency_p95_escalation_message}"
-
-  recipients         = "${var.recipients}"
-  alert_recipients   = "${var.alert_recipients}"
-  warning_recipients = "${var.warning_recipients}"
-
-  renotify_interval = "${var.renotify_interval}"
-  notify_audit      = "${var.notify_audit}"
-  
 }
 
 module "monitor_server_exception" {
@@ -216,7 +188,7 @@ module "monitor_server_exception" {
 
 module "monitor_client_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
-  enabled = "${local.monitor_enabled && length(var.client_method_names) < 1}"
+  enabled = "${local.monitor_enabled}"
 
   product_domain = "${var.product_domain}"
   service        = "${var.service}"
@@ -227,31 +199,6 @@ module "monitor_client_latency_p95" {
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
   query              = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,methodname,destnodeid} >= ${var.client_latency_p95_thresholds["critical"]}"
   thresholds         = "${var.client_latency_p95_thresholds}"
-  message            = "${var.client_latency_p95_message}"
-  escalation_message = "${var.client_latency_p95_escalation_message}"
-
-  recipients         = "${var.recipients}"
-  alert_recipients   = "${var.alert_recipients}"
-  warning_recipients = "${var.warning_recipients}"
-
-  renotify_interval = "${var.renotify_interval}"
-  notify_audit      = "${var.notify_audit}"
-}
-
-module "monitor_client_latency_p95_multi" {
-  source  = "github.com/traveloka/terraform-datadog-monitor"
-  count    = "${length(var.client_method_names)}"
-  enabled = "${local.multi_client_enabled}"
-
-  product_domain = "${var.product_domain}"
-  service        = "${var.service}"
-  environment    = "${var.environment}"
-  tags           = "${var.tags}"
-  timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
-
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: ${var.client_method_names[count.index]} Destination: {{ destnodeid }}"
-  query              = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}, methodname:${var.client_method_names[count.index]}} by {host,destnodeid} >= ${var.client_thresholds[count.index]["critical"]}"
-  thresholds         = "${var.client_thresholds[count.index]}"
   message            = "${var.client_latency_p95_message}"
   escalation_message = "${var.client_latency_p95_escalation_message}"
 
