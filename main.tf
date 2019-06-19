@@ -3,7 +3,7 @@ locals {
 }
 
 resource "datadog_timeboard" "rpc" {
-  count = "${var.enabled}"
+  count = "${var.enabled ? 1 : 0}"
 
   title       = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC"
   description = "A generated timeboard for RPC"
@@ -38,7 +38,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.client.count{$cluster, $environment} by {host,name,destnodeid}.rollup(sum)"
+      q = "sum:rpc.client.count{$cluster, $environment} by {host,name,destnodeid}.rollup(sum)"
 
       type = "line"
     }
@@ -98,7 +98,7 @@ resource "datadog_timeboard" "rpc" {
       type = "line"
     }
   }
-  
+
   graph {
     title     = "Circuit Breaker State"
     viz       = "timeseries"
@@ -111,17 +111,17 @@ resource "datadog_timeboard" "rpc" {
 
     marker {
       type  = "ok bold"
-      value = "y = 1" 
+      value = "y = 1"
       label = "CLOSE"
     }
     marker {
       type  = "error bold"
-      value = "y = 2" 
+      value = "y = 2"
       label = "OPEN"
     }
     marker {
       type  = "warning bold"
-      value = "y = 3" 
+      value = "y = 3"
       label = "HALF OPEN"
     }
   }
