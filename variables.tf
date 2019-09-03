@@ -170,3 +170,33 @@ variable "circuit_breaker_status_escalation_message" {
   default     = ""
   description = "The escalation message when RPC Circuit Breaker Status monitor isn't resolved for given time"
 }
+
+variable "server_exception_custom_query" {
+  type        = "string"
+  default     = ""
+  description = "The custom query for server exception monitoring"
+}
+
+variable "server_latency_p95_custom_query" {
+  type        = "string"
+  default     = ""
+  description = "The custom query for RPC Server Latency P95 monitoring"
+}
+
+variable "client_latency_p95_custom_query" {
+  type        = "string"
+  default     = ""
+  description = "The custom query for RPC Client Latency P95 monitoring"
+}
+
+variable "client_exception_custom_query" {
+  type        = "string"
+  default     = ""
+  description = "The custom query for client exception monitoring"
+}
+
+variable "circuit_breaker_status_custom_query" {
+  type        = "string"
+  default     = ""
+  description = "The custom query for circuit breaker status monitoring"
+}
