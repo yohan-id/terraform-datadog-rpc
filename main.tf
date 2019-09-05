@@ -50,7 +50,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q = "sum:rpc.client.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}.rollup(sum)"
+      q = "sum:rpc.client.count{$cluster, $environment, $methodname, $destnodeid} by {destnodeid, methodname}.rollup(sum)"
 
       type = "line"
     }
@@ -62,7 +62,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "max:rpc.client.ltcy.p95{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}"
+      q    = "max:rpc.client.ltcy.p95{$cluster, $environment, $methodname, $destnodeid} by {destnodeid, methodname}"
       type = "line"
     }
   }
@@ -73,7 +73,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.client.exc.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}.rollup(sum)"
+      q    = "sum:rpc.client.exc.count{$cluster, $environment, $methodname, $destnodeid} by {destnodeid, methodname}.rollup(sum)"
       type = "line"
     }
   }
@@ -257,7 +257,7 @@ module "monitor_circuit_breaker_status" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "${coalesce(var.circuit_breaker_status_custom_query, "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.circuit_breaker_status_thresholds["critical"]}")}" 
+  query              = "${coalesce(var.circuit_breaker_status_custom_query, "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.circuit_breaker_status_thresholds["critical"]}")}"
   thresholds         = "${var.circuit_breaker_status_thresholds}"
   message            = "${var.circuit_breaker_status_message}"
   escalation_message = "${var.circuit_breaker_status_escalation_message}"
